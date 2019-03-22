@@ -12,5 +12,3 @@ services:
     volumes:
       - $HOME:/host
     command: uname -sm
-    # stdin_open: true
-    # tty: true

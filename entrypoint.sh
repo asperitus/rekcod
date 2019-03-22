@@ -26,4 +26,13 @@ grep -q "rekcod@local.m3" $AUTH; if [ $? -ne 0 ]; then
     cat $RCDATA/id_rsa.pub >> $AUTH
 fi
 
-exec ssh -q -o StrictHostKeyChecking=no -i $RCDATA/id_rsa ${HOST_USER}@host.docker.internal "$@"
+trap 'true' SIGTERM
+
+ssh -q -o StrictHostKeyChecking=no -i $RCDATA/id_rsa ${HOST_USER}@host.docker.internal "$@" &
+
+wait $!
+
+if [ ! -z "$SHUTDOWN_HOOK" ]; then
+    ssh -q -o StrictHostKeyChecking=no -i $RCDATA/id_rsa ${HOST_USER}@host.docker.internal "$SHUTDOWN_HOOK"
+fi
+
