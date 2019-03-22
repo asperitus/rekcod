@@ -1,0 +1,16 @@
+#
+version: '3.6'
+
+services:
+  rekcod:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: asperitus/rekcod:latest
+    environment:
+      - HOST_USER=$USER
+    volumes:
+      - $HOME:/host
+    command: uname -sm
+    # stdin_open: true
+    # tty: true
